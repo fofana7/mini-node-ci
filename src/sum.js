@@ -17,3 +17,4 @@ export function sum(a, b) {
 }
 
 // Exemple d'utilisation
+// Exemple de protection de la branche main 
