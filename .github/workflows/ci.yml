@@ -1,40 +1,51 @@
-name: CI
-# Retest trigger commit: ${DATE}
-#Test
+name: 🧪 CI Pipeline
+
+# Déclencheurs du workflow
 on:
   push:
-    branches: [ "main", "develop", "feature/**" ]
+    branches:
+      - "main"
+      - "develop"
+      - "feature/**"
   pull_request:
-    branches: [ "main", "develop" ]
- 
+    branches:
+      - "main"
+      - "develop"
+
 jobs:
   build-test-analyze:
+    name: Build, Test & Analyze
     runs-on: ubuntu-latest
- 
+
     steps:
-      - name: Checkout code
+      # 🧩 Étape 1 : Récupération du code source
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
- 
+          fetch-depth: 0   # Nécessaire pour SonarCloud (analyse complète de l’historique)
+
+      # ⚙️ Étape 2 : Configuration de Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
- 
+          cache: "npm"     # Accélère les builds grâce au cache npm
+
+      # 📦 Étape 3 : Installation des dépendances
       - name: Install dependencies
-        run: npm ci
- 
-      - name: Run tests
+        run: npm ci        # Utilise le package-lock.json pour une installation déterministe
+
+      # 🧪 Étape 4 : Lancement des tests unitaires avec couverture
+      - name: Run tests with coverage
         run: npm test -- --coverage
         env:
-          NODE_OPTIONS: --experimental-vm-modules
- 
+          NODE_OPTIONS: --experimental-vm-modules  # Permet d'utiliser ES modules (import/export)
+
+      # 🔍 Étape 5 : Analyse du code avec SonarCloud
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         with:
-          projectBaseDir: .
+          projectBaseDir: .  # Racine du projet
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Permet à Sonar d’accéder aux métadonnées du dépôt
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # Ton token d’analyse SonarCloud
