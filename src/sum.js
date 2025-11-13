@@ -15,3 +15,4 @@ export function sum(a, b) {
   // Retourne la somme des deux nombres
   return a + b;
 }
+// test de protection
