@@ -35,13 +35,17 @@ jobs:
       - name: Install dependencies
         run: npm ci        # Utilise le package-lock.json pour une installation déterministe
 
-      # 🧪 Étape 4 : Lancement des tests unitaires avec couverture
+      # 🧹 Étape 4 : Vérification du code avec ESLint
+      - name: Run ESLint
+        run: npm run lint
+
+      # 🧪 Étape 5 : Lancement des tests unitaires avec couverture
       - name: Run tests with coverage
         run: npm test -- --coverage
         env:
           NODE_OPTIONS: --experimental-vm-modules  # Permet d'utiliser ES modules (import/export)
 
-      # 🔍 Étape 5 : Analyse du code avec SonarCloud
+      # 🔍 Étape 6 : Analyse du code avec SonarCloud
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         with:

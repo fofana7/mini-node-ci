@@ -1,5 +1,4 @@
-// CommonJS
-const { calc } = require('../src/calc.js');
+import { calc } from '../src/calc.js';
 
 describe('calc', () => {
   test('add/sub/mul work', () => {
